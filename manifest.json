@@ -1,0 +1,15 @@
+{
+  "name": "MIG & TIG Welding Shielding Gas Cylinder Run-Time Calculator",
+  "short_name": "Welding Gas Calc",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#140a02",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

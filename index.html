@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIG & TIG Welding Shielding Gas Cylinder Run-Time Calculator — Accurate Material Estimator</title>
+  <meta name="description" content="Calculate exact arc-on shielding gas run time in hours and minutes for MIG and TIG cylinders based on cubic feet (CF) and flow rate (CFH).">
+  <link rel="canonical" href="https://sebiglesias.com.ar/mig-tig-gas-tank-calculator/">
+  <meta name="theme-color" content="#f97316">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MIG & TIG Welding Shielding Gas Cylinder Run-Time Calculator">
+  <meta property="og:description" content="Calculate exact arc-on shielding gas run time in hours and minutes for MIG and TIG cylinders based on cubic feet (CF) and flow rate (CFH).">
+  <meta property="og:url" content="https://sebiglesias.com.ar/mig-tig-gas-tank-calculator/">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2BNDBQP0W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2BNDBQP0W7');
+  </script>
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-3381238987477190">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3381238987477190" crossorigin="anonymous"></script>
+
+  <!-- JSON-LD Schema -->
+  <script type="application/ld+json">
+  [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "MIG & TIG Welding Shielding Gas Cylinder Run-Time Calculator",
+    "url": "https://sebiglesias.com.ar/mig-tig-gas-tank-calculator/",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "description": "Calculate exact arc-on shielding gas run time in hours and minutes for MIG and TIG cylinders based on cubic feet (CF) and flow rate (CFH).",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How long will an 80 CF shielding gas tank last?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "At a standard flow rate of 20 CFH, an 80 CF cylinder provides exactly 4.0 hours of continuous arc-on trigger time. Because most fabricators have an arc-on duty cycle of 25% to 35% (the rest spent measuring, clamping, and grinding), an 80 CF tank will last roughly 12 to 16 shop hours."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does setting CFH too high cause porosity in welds?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Excessive flow rates (> 30\u201335 CFH on small nozzles) generate turbulent gas flow instead of a smooth laminar shield, which sucks atmospheric oxygen and nitrogen directly into the molten weld pool, causing porosity."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the best shielding gas for mild steel MIG welding?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A 75% Argon / 25% CO2 mix (commonly called C25) is the industry benchmark for short-circuit MIG on mild steel. It provides minimal spatter, stable arc transfer, and deep penetration."
+        }
+      }
+    ]
+  }
+]
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">⚡ AWS D1.1 Shielding Gas & Fabrication Standards</div>
+      <h1>Welding Shielding Gas Run-Time Calculator</h1>
+      <p class="subtitle">Calculate arc-on time hours, full working days, and hourly shielding gas cost based on cylinder volume (CF) and flow rate (CFH).</p>
+    </header>
+
+    <!-- AdSense Top Banner -->
+    <div style="text-align:center; margin: 16px 0;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3381238987477190"
+           data-ad-slot="auto"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="calc-grid">
+      <!-- Inputs Card -->
+      <form class="card" id="mig-tig-gas-tank-calculator-form" onsubmit="event.preventDefault();">
+        <h2>📐 Cylinder Size & Flow Rate</h2>
+        
+        <div class="input-row">
+          <div class="form-group">
+            <label for="tankSize">Cylinder Volume (CF)</label>
+            <select id="tankSize">
+              <option value="20">20 CF (Small Portable / Field Tank)</option>
+              <option value="40">40 CF (Hobbyist Tank)</option>
+              <option value="80" selected>80 CF (Mid-Size Shop Tank)</option>
+              <option value="125">125 CF (Standard Fabrication Tank)</option>
+              <option value="150">150 CF (Pro Shop Cylinder)</option>
+              <option value="250">250 CF (Commercial Large Tank)</option>
+              <option value="330">330 CF (Industrial Cylinder)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="flowRate">Shielding Gas Flow Rate</label>
+            <div class="input-wrap">
+              <input type="number" id="flowRate" step="1" min="8" max="45" value="20" required>
+              <span class="input-suffix">CFH</span>
+            </div>
+            <span class="hint">Standard TIG = 12–18 CFH; MIG (C25) = 18–25 CFH</span>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="form-group">
+            <label for="dutyCycle">Average Arc-On Time Percentage</label>
+            <div class="input-wrap">
+              <input type="number" id="dutyCycle" step="5" min="10" max="80" value="30" required>
+              <span class="input-suffix">%</span>
+            </div>
+            <span class="hint">Time trigger is actually squeezed vs fit-up/grinding</span>
+          </div>
+          <div class="form-group">
+            <label for="refillCost">Cylinder Refill / Exchange Cost</label>
+            <div class="input-wrap">
+              <input type="number" id="refillCost" step="5" min="20" max="250" value="65" required>
+              <span class="input-suffix">$ USD</span>
+            </div>
+          </div>
+        </div>
+        
+      </form>
+
+      <!-- Results Card -->
+      <div class="card">
+        <h2>📊 Cylinder Arc-On Hours & Cost</h2>
+        
+        <div class="result-hero">
+          <div class="result-hero-val" id="resArcHours">4 hrs 00 min</div>
+          <div class="result-hero-label">Continuous Arc-On Time Trigger Squeezed</div>
+        </div>
+
+        <div class="specs-grid">
+          <div class="spec-item">
+            <div class="spec-desc">Total Fabrication Shop Time</div>
+            <div class="spec-val" id="resShopTime">13.3 Total Shop Hours</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-desc">Hourly Shielding Gas Cost</div>
+            <div class="spec-val" id="resHourlyCost">$16.25 / arc hour</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-desc">Typical Working Days / Tank</div>
+            <div class="spec-val" id="resWorkDays">~2.2 Shop Days</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-desc">Gas Type Standard</div>
+            <div class="spec-val">C25 (75/25) or 100% Argon</div>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+
+    
+
+    <!-- Amazon Supplies Box -->
+    <section class="supplies-card">
+      <h3>🛠️ Recommended Welding Regulators, Carts & Safety Gear</h3>
+      <div class="supplies-grid">
+        <div class="supply-item">
+          <div>
+            <div class="supply-title">Dual Flowmeter Argon / CO2 Welding Regulator with Hose</div>
+            <div class="supply-desc">Precision dual-scale flowmeter gauge (0-60 CFH) for accurate gas coverage without turbulence.</div>
+          </div>
+          <a href="https://www.amazon.com/s?k=argon+flowmeter+regulator+mig+tig&tag=sebiglesias-20" target="_blank" rel="nofollow noopener" class="btn-amazon">Check on Amazon →</a>
+        </div>
+        <div class="supply-item">
+          <div>
+            <div class="supply-title">Heavy-Duty All-Steel Welding Cart with Dual Cylinder Racks</div>
+            <div class="supply-desc">Three-tier workshop trolley with heavy safety chains and wheels designed for 80-150 CF cylinders.</div>
+          </div>
+          <a href="https://www.amazon.com/s?k=welding+cart+with+tank+storage&tag=sebiglesias-20" target="_blank" rel="nofollow noopener" class="btn-amazon">Check on Amazon →</a>
+        </div>
+        <div class="supply-item">
+          <div>
+            <div class="supply-title">Premium Goatskin TIG Welding Gloves</div>
+            <div class="supply-desc">High-dexterity heat-resistant split goatskin gloves providing precision touch for filler rod feeding.</div>
+          </div>
+          <a href="https://www.amazon.com/s?k=tillman+goatskin+tig+welding+gloves&tag=sebiglesias-20" target="_blank" rel="nofollow noopener" class="btn-amazon">Check on Amazon →</a>
+        </div>
+        <div class="supply-item">
+          <div>
+            <div class="supply-title">Cylinder Safety Wall Mount Chain Bracket (OSHA Compliant)</div>
+            <div class="supply-desc">Heavy galvanized steel wall bracket with locking link chain to prevent catastrophic tank tip-overs.</div>
+          </div>
+          <a href="https://www.amazon.com/s?k=gas+cylinder+safety+wall+bracket&tag=sebiglesias-20" target="_blank" rel="nofollow noopener" class="btn-amazon">Check on Amazon →</a>
+        </div>
+      </div>
+      <p style="font-size:0.75rem; color:#94a3b8; margin-top:14px; margin-bottom:0; text-align:center;">
+        ⚖️ <em>Affiliate Notice: As an Amazon Associate, this site earns from qualifying purchases at no additional cost to you. We strictly link to trade-grade welding regulators, cylinder safety carts, and PPE.</em>
+      </p>
+    </section>
+
+    <!-- FAQ Section for SEO -->
+    <section class="faq-section">
+      <h2 style="font-size:1.35rem; color:#ffffff; margin-bottom:16px;">Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <div class="faq-q">How long will an 80 CF shielding gas tank last?</div>
+        <div class="faq-a">At a standard flow rate of 20 CFH, an 80 CF cylinder provides exactly 4.0 hours of continuous arc-on trigger time. Because most fabricators have an arc-on duty cycle of 25% to 35% (the rest spent measuring, clamping, and grinding), an 80 CF tank will last roughly 12 to 16 shop hours.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why does setting CFH too high cause porosity in welds?</div>
+        <div class="faq-a">Excessive flow rates (> 30–35 CFH on small nozzles) generate turbulent gas flow instead of a smooth laminar shield, which sucks atmospheric oxygen and nitrogen directly into the molten weld pool, causing porosity.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What is the best shielding gas for mild steel MIG welding?</div>
+        <div class="faq-a">A 75% Argon / 25% CO2 mix (commonly called C25) is the industry benchmark for short-circuit MIG on mild steel. It provides minimal spatter, stable arc transfer, and deep penetration.</div>
+      </div>
+    </section>
+
+    <!-- Bottom AdSense Banner -->
+    <div style="text-align:center; margin: 32px 0;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3381238987477190"
+           data-ad-slot="auto"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer>
+      <p>© 2026 <a href='https://sebiglesias.com.ar/'>sebiglesias.com.ar</a> · Welding Gas Cylinder Calculator. Trade and fabrication reference tool.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
